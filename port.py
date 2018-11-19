@@ -3,7 +3,7 @@ import json
 import requests
 import subprocess
 import configparser
-from shutil import copy2
+import shutil
 from zipfile import ZipFile
 
 class UP: 
@@ -89,6 +89,14 @@ class UP:
 
     # CLASS METHODS - START
 
+    def cleanUp(self):
+        if (os.path.isdir(self.paths['uniswap_zip_download_location'])):
+            print('Removing ' + self.paths['uniswap_zip_download_location'] + ' now because we want a clean slate!')
+            shutil.rmtree(self.paths['uniswap_zip_download_location'])
+        if (os.path.isdir(self.paths['uniswap_base_dir'])):
+            print('Removing ' + self.paths['uniswap_base_dir'] + ' now because we want a clean slate!')
+            shutil.rmtree(self.paths['uniswap_base_dir'])
+
     def housekeeping(self):
         print('Operating out of path: ' + os.getcwd())
         print('Changing directories...')
@@ -171,11 +179,12 @@ class UP:
         for (root, dirs, files) in os.walk('./images'):
             for name in files:
                 print('Copying: ' + os.path.join(root,name) + " to " + self.paths['uniswap_image_dir'])
-                copy2(os.path.join(root, name), self.paths['uniswap_image_dir'])
+                shutil.copy2(os.path.join(root, name), self.paths['uniswap_image_dir'])
     # CLASS METHODS - END
 
 # DRIVER - START
 uniswapPort = UP()
+uniswapPort.cleanUp()
 uniswapPort.housekeeping()
 uniswapPort.fetchUniswapSourceCode()
 uniswapPort.unpackUniswapSourceCode()
