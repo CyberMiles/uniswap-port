@@ -8,17 +8,19 @@ from zipfile import ZipFile
 
 class UP: 
     def __init__(self):
+        self.scriptExecutionLocation = os.getcwd()
+        print("Starting to port Uniswap, please wait.")
         # GENERAL CLASS VARIABLES - START
         self.addressJsData = {}
         self.stringForAddressJsFile = ''
         # GENERAL CLASS VARIABLES - END
 
         # READ CONFIGURATION (uniswap.ini) INTO CLASS VARIABLES - START
-        print("Reading configuration file, uniswap.ini\n")
+        print("Reading configuration file, uniswap.ini")
         config = configparser.ConfigParser()
         config.read('uniswap.ini')
 
-        print("Configuration is as follows ...\n")
+        print("Configuration is as follows ...")
 
         self.urls = {}
         for key in config['urls']:
@@ -88,21 +90,27 @@ class UP:
     # CLASS METHODS - START
 
     def housekeeping(self):
+        print('Operating out of path: ' + os.getcwd())
+        print('Changing directories...')
         os.chdir(self.paths['home_dir'])
+        print('Operating out of path: ' + os.getcwd())
 
     def fetchUniswapSourceCode(self):
+        print('Operating out of path: ' + os.getcwd())
+        print('Fetching Uniswap source code from ' + self.urls['uniswap_source_code'])
         r = requests.get(self.urls['uniswap_source_code'])
         with open(self.paths['uniswap_zip_download_location'], 'wb') as f:
             f.write(r.content)
 
     def unpackUniswapSourceCode(self):
+        print('Operating out of path: ' + os.getcwd())
+        print('Unpacking Uniswap source code...')
         with ZipFile(self.paths['uniswap_zip_download_location'], 'r') as zip: 
-            # extracting all the files 
-            print('Extracting all the files now...') 
             zip.extractall() 
-            print('Done!')
 
     def buildAddress(self, items, addressType):
+        print('Operating out of path: ' + os.getcwd())
+        print("Creating " + addressType + " configuration...")
         self.addressJsData[addressType] = {}
         addresses = []
         address = []
@@ -114,10 +122,13 @@ class UP:
         self.addressJsData[addressType]['address'] = addresses
 
     def runBuildAddresses(self):
+        print('Operating out of path: ' + os.getcwd())
         self.buildAddress(self.uniswapExchangeAddresses.items(), 'exchangeAddresses')
         self.buildAddress(self.uniswapTokenAddresses.items(), 'tokenAddresses')
 
     def pairExchangeAndTokenAddresses(self):
+        print('Operating out of path: ' + os.getcwd())
+        print("Creating exchange and token pairing configuration...")
         fromToken = {}
         for (k1, v1) in self.uniswapTokenAddresses.items():
             for (k2, v2) in self.uniswapExchangeAddresses.items():
@@ -126,13 +137,21 @@ class UP:
         self.addressJsData['exchangeAddresses']['fromToken'] = fromToken
 
     def createStringForAddressJsFile(self):
+        print('Operating out of path: ' + os.getcwd())
+        print('Creating final string for address.js file...')
         self.stringForAddressJsFile = self.stringForAddressJsFile + 'const ' + self.networkName.upper() + ' = ' + json.dumps(self.addressJsData, indent=4) + ";\n"
-    
+        print(self.stringForAddressJsFile)
+
     def writeStringForAddressFile(self):
+        print('Operating out of path: ' + os.getcwd())
+        print('Writing final string to address.js file...')
         sedReplacementString = '1s/^/' + self.stringForAddressJsFile + '/ '
+        print('The sed sedReplacementString is ' + sedReplacementString)
         subprocess.call(['sed', '-ir', sedReplacementString, os.path.join(self.paths['uniswap_source_code_dir'], 'ducks', 'addresses.js')])
     
     def performTextReplacements(self):
+        print('Operating out of path: ' + os.getcwd())
+        print('Performing text replacement in each individual file...')
         for (root, dirs, files) in os.walk(self.paths['uniswap_source_code_dir']):
             for name in files:
                 for (key, value) in self.multicaseTextReplacements.items():
@@ -145,8 +164,13 @@ class UP:
                     subprocess.call(['sed', '-ir', sedCommandDoubleQuotes, os.path.join(root, name)])
 
     def performImageCopying(self):
+        print('Operating out of path: ' + os.getcwd())
+        print('Changing directories to ' + self.scriptExecutionLocation)
+        os.chdir(self.scriptExecutionLocation)
+        print('Copying image files...')
         for (root, dirs, files) in os.walk('./images'):
             for name in files:
+                print('Copying: ' + os.path.join(root,name) + " to " + self.paths['uniswap_image_dir'])
                 copy2(os.path.join(root, name), self.paths['uniswap_image_dir'])
     # CLASS METHODS - END
 
