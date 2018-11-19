@@ -1,9 +1,11 @@
 import os
 import json
+import shutil
 import requests
+import fileinput
 import subprocess
 import configparser
-import shutil
+
 from zipfile import ZipFile
 
 class UP: 
@@ -147,15 +149,31 @@ class UP:
     def createStringForAddressJsFile(self):
         print('Operating out of path: ' + os.getcwd())
         print('Creating final string for address.js file...')
-        self.stringForAddressJsFile = self.stringForAddressJsFile + 'const ' + self.networkName.upper() + ' = ' + json.dumps(self.addressJsData) + ";"
+        self.stringForAddressJsFile = self.stringForAddressJsFile + 'const ' + self.networkName.upper() + ' = ' + json.dumps(self.addressJsData, indent=4) + ";\n"
         print(self.stringForAddressJsFile)
 
     def writeStringForAddressFile(self):
         print('Operating out of path: ' + os.getcwd())
-        print('Writing final string to address.js file...')
-        sedReplacementString = '1s/^/' + self.stringForAddressJsFile + '/'
-        subprocess.call(['sed', '-ir', sedReplacementString, os.path.join(self.paths['uniswap_source_code_dir'], 'ducks', 'addresses.js')])
-    
+        print('Writing final string to address.js file at: ' + self.paths['uniswap_addresses_js_file'])
+        # This can be done with sed (as demonstrated in the following 2 lines) but I think the formatting of the output file is important so I will do it with Python fileinput
+        #sedReplacementString = '1s/^/' + self.stringForAddressJsFile + '/'
+        #subprocess.call(['sed', '-ir', sedReplacementString, os.path.join(self.paths['uniswap_source_code_dir'], 'ducks', 'addresses.js')])
+        temp_data_11 = os.path.join(os.getcwd(), 'temp_data_11.js')
+        temp_data_1 = os.path.join(os.getcwd(), 'temp_data_1.js')
+        temp_data_2 = os.path.join(os.getcwd(), 'temp_data_2.js')
+        with open(temp_data_1, 'w') as tempOutFile:
+            tempOutFile.write(self.stringForAddressJsFile)
+        tempOutFile.close()
+        with open(temp_data_11, 'w') as tempOutFile11:
+            tempOutFile11.write("asdf")
+        tempOutFile11.close()
+        with open(temp_data_2, 'w') as fout, fileinput.input(files=(temp_data_1, self.paths['uniswap_addresses_js_file'])) as fin:
+            for line in fin:
+                fout.write(line)
+        os.remove(temp_data_1)
+        os.remove(self.paths['uniswap_addresses_js_file'])
+        os.rename(temp_data_2, self.paths['uniswap_addresses_js_file'])
+
     def performTextReplacements(self):
         print('Operating out of path: ' + os.getcwd())
         print('Performing text replacement in each individual file...')
@@ -179,6 +197,11 @@ class UP:
             for name in files:
                 print('Copying: ' + os.path.join(root,name) + " to " + self.paths['uniswap_image_dir'])
                 shutil.copy2(os.path.join(root, name), self.paths['uniswap_image_dir'])
+
+    def printMessage(self):
+        print("Porting complete")
+        print("To verify filenames containing the string \"ethereum\" please use the following find command")
+        print("find " + self.paths['uniswap_base_dir'] + " -name \"*ethereum*\" -print")
     # CLASS METHODS - END
 
 # DRIVER - START
@@ -193,5 +216,6 @@ uniswapPort.createStringForAddressJsFile()
 uniswapPort.writeStringForAddressFile()
 uniswapPort.performTextReplacements()
 uniswapPort.performImageCopying()
+uniswapPort.printMessage()
 # DRIVER - END
 
