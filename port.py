@@ -147,17 +147,13 @@ class UP:
     def createStringForAddressJsFile(self):
         print('Operating out of path: ' + os.getcwd())
         print('Creating final string for address.js file...')
-        self.stringForAddressJsFile = self.stringForAddressJsFile + 'const ' + self.networkName.upper() + ' = ' + json.dumps(self.addressJsData, indent=4) + ";\n"
+        self.stringForAddressJsFile = self.stringForAddressJsFile + 'const ' + self.networkName.upper() + ' = ' + json.dumps(self.addressJsData) + ";"
         print(self.stringForAddressJsFile)
 
     def writeStringForAddressFile(self):
         print('Operating out of path: ' + os.getcwd())
         print('Writing final string to address.js file...')
-        print("****")
-        #'1s/^/const TRAVIS
-        #'1s/^/dddddddoooooooggggggg\n/' asdf.txt)
-        sedReplacementString = '\'1s/^/' + self.stringForAddressJsFile + '\'/'
-        print('The sed sedReplacementString is ' + sedReplacementString)
+        sedReplacementString = '1s/^/' + self.stringForAddressJsFile + '/'
         subprocess.call(['sed', '-ir', sedReplacementString, os.path.join(self.paths['uniswap_source_code_dir'], 'ducks', 'addresses.js')])
     
     def performTextReplacements(self):
