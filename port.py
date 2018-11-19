@@ -153,7 +153,10 @@ class UP:
     def writeStringForAddressFile(self):
         print('Operating out of path: ' + os.getcwd())
         print('Writing final string to address.js file...')
-        sedReplacementString = '1s/^/' + self.stringForAddressJsFile + '/ '
+        print("****")
+        #'1s/^/const TRAVIS
+        #'1s/^/dddddddoooooooggggggg\n/' asdf.txt)
+        sedReplacementString = '\'1s/^/' + self.stringForAddressJsFile + '\'/'
         print('The sed sedReplacementString is ' + sedReplacementString)
         subprocess.call(['sed', '-ir', sedReplacementString, os.path.join(self.paths['uniswap_source_code_dir'], 'ducks', 'addresses.js')])
     
@@ -162,10 +165,10 @@ class UP:
         print('Performing text replacement in each individual file...')
         for (root, dirs, files) in os.walk(self.paths['uniswap_source_code_dir']):
             for name in files:
+                print("Processing: " + os.path.join(root, name))
                 for (key, value) in self.multicaseTextReplacements.items():
                     sedCommandSingleQuotes = 's/\'' + key + '\'/\'' + value + '\'/g'
                     sedCommandDoubleQuotes = 's/\"' + key + '\"/\"' + value + '\"/g'
-                    print("Processing: " + os.path.join(root, name))
                     #print(sedCommandSingleQuotes)
                     #print(sedCommandDoubleQuotes)
                     subprocess.call(['sed', '-ir', sedCommandSingleQuotes, os.path.join(root, name)])
