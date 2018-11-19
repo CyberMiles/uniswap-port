@@ -158,15 +158,10 @@ class UP:
         # This can be done with sed (as demonstrated in the following 2 lines) but I think the formatting of the output file is important so I will do it with Python fileinput
         #sedReplacementString = '1s/^/' + self.stringForAddressJsFile + '/'
         #subprocess.call(['sed', '-ir', sedReplacementString, os.path.join(self.paths['uniswap_source_code_dir'], 'ducks', 'addresses.js')])
-        temp_data_11 = os.path.join(os.getcwd(), 'temp_data_11.js')
         temp_data_1 = os.path.join(os.getcwd(), 'temp_data_1.js')
         temp_data_2 = os.path.join(os.getcwd(), 'temp_data_2.js')
         with open(temp_data_1, 'w') as tempOutFile:
             tempOutFile.write(self.stringForAddressJsFile)
-        tempOutFile.close()
-        with open(temp_data_11, 'w') as tempOutFile11:
-            tempOutFile11.write("asdf")
-        tempOutFile11.close()
         with open(temp_data_2, 'w') as fout, fileinput.input(files=(temp_data_1, self.paths['uniswap_addresses_js_file'])) as fin:
             for line in fin:
                 fout.write(line)
@@ -197,6 +192,9 @@ class UP:
             for name in files:
                 print('Copying: ' + os.path.join(root,name) + " to " + self.paths['uniswap_image_dir'])
                 shutil.copy2(os.path.join(root, name), self.paths['uniswap_image_dir'])
+
+    def editPackageJson(self):
+        print('Editing core package file to create npm start command')
 
     def printMessage(self):
         print("Porting complete")
