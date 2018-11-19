@@ -1,0 +1,166 @@
+import os
+import json
+import requests
+import subprocess
+import configparser
+from shutil import copy2
+from zipfile import ZipFile
+
+class UP: 
+    def __init__(self):
+        # GENERAL CLASS VARIABLES - START
+        addressJsData = {}
+        stringForAddressJsFile = ''
+        # GENERAL CLASS VARIABLES - END
+
+        # READ CONFIGURATION (uniswap.ini) INTO CLASS VARIABLES - START
+        print("Reading configuration file, uniswap.ini\n")
+        config = configparser.ConfigParser()
+        config.read('uniswap.ini')
+
+        print("Configuration is as follows ...\n")
+
+        self.urls = {}
+        for key in config['urls']:
+            stringKey = str(key)
+            self.urls[stringKey] = config['urls'][key]
+        print("\nURLs:")
+        for (ufaKey, ufaValue) in self.urls.items():
+            print(ufaKey + ": " + ufaValue)
+
+        self.networkName = config['cybermiles']['networkName']
+        print("networkName: " + self.networkName)
+
+        self.networkId = config['cybermiles']['networkId']
+        print("networkId: " + self.networkId)
+
+        self.uniswapFactoryAddress = config['uniswapFactoryAddress']['factoryAddress']
+        print("factoryAddress: " + self.uniswapFactoryAddress)
+
+        self.uniswapTokenAddresses = {}
+        for key in config['uniswapTokenAddresses']:
+            stringKey = str(key)
+            upperStringKey = stringKey.upper()
+            self.uniswapTokenAddresses[upperStringKey] = config['uniswapTokenAddresses'][upperStringKey]
+        print("\nUniswapTokenAddresses:")
+        for (ufaKey, ufaValue) in self.uniswapTokenAddresses.items():
+            print(ufaKey + ": " + ufaValue)
+
+        self.uniswapExchangeAddresses = {}
+        for key in config['uniswapExchangeAddresses']:
+            stringKey = str(key)
+            upperStringKey = stringKey.upper()
+            self.uniswapExchangeAddresses[upperStringKey] = config['uniswapExchangeAddresses'][upperStringKey]
+        print("\nUniswapExchangeAddresses:")
+        for (ufaKey, ufaValue) in self.uniswapExchangeAddresses.items():
+            print(ufaKey + ": " + ufaValue)
+
+        self.multicaseTextReplacements = {}
+        for key in config['multicaseTextReplacements']:
+            stringKey = str(key)
+            upperStringKey = stringKey.upper()
+            self.multicaseTextReplacements[stringKey] = config['multicaseTextReplacements'][stringKey]
+            valueToConvert = config['multicaseTextReplacements'][stringKey]
+            self.multicaseTextReplacements[stringKey.capitalize()] = str(valueToConvert).capitalize()
+            self.multicaseTextReplacements[stringKey.upper()] = str(valueToConvert).upper()
+            self.multicaseTextReplacements[key] = config['multicaseTextReplacements'][key]
+        print("\nMulticaseTextReplacements:")
+        for (ufaKey, ufaValue) in self.multicaseTextReplacements.items():
+            print(ufaKey + ": " + ufaValue)
+
+        self.lowerCaseTextReplacements = {}
+        for key in config['lowerCaseTextReplacements']:
+            stringKey = str(key)
+            self.lowerCaseTextReplacements[stringKey] = config['lowerCaseTextReplacements'][stringKey]
+        print("\nLowerCaseTextReplacements:")
+        for (ufaKey, ufaValue) in self.lowerCaseTextReplacements.items():
+            print(ufaKey + ": " + ufaValue)
+
+        self.paths = {}
+        for key in config['paths']:
+            stringKey = str(key)
+            self.paths[stringKey] = config['paths'][key]
+        print("\nPaths:")
+        for (ufaKey, ufaValue) in self.paths.items():
+            print(ufaKey + ": " + ufaValue)
+    # READ CONFIGURATION (uniswap.ini) INTO CLASS VARIABLES - END
+
+    # CLASS METHODS - START
+
+    def housekeeping():
+        os.chdir(self.home_dir)
+
+    def fetchUniswapSourceCode():
+        r = requests.get(self.uniswap_source_code)
+        with open(os.path.join(self.uniswap_zip_download_location, 'wb')) as f:
+            f.write(r.content)
+
+    def unpackUniswapSourceCode():
+        with ZipFile(self.uniswap_zip_download_location, 'r') as zip: 
+            # extracting all the files 
+            print('Extracting all the files now...') 
+            zip.extractall() 
+            print('Done!')
+
+
+    def buildAddress(addressType):
+        self.addressJsData[addressType] = {}
+        addresses = []
+        address = []
+        for (k, v) in eval(addressType).items():
+            address.append(k)
+            address.append(v)
+            addresses.append(address)
+            address = []
+        self.addressJsData[addressType]['address'] = addresses
+
+    def runBuildAddresses():
+        self.buildAddress(self.uniswapExchangeAddresses)
+        self.buildAddress(self.uniswapTokenAddresses)
+
+    def pairExchangeAndTokenAddresses():
+        fromToken = {}
+        for (k1, v1) in self.uniswapTokenAddresses.items():
+            for (k2, v2) in self.uniswapExchangeAddresses.items():
+                if k1 == k2:
+                    fromToken[v1] = v2
+        self.addressJsData['exchangeAddresses']['fromToken'] = fromToken
+
+    def createStringForAddressJsFile():
+        self.stringForAddressJsFile = self.stringForAddressJsFile + 'const ' + self.networkName.upper() + ' = ' + json.dumps(self.addressJsData, indent=4) + ";\n"
+    
+    def writeStringForAddressFile():
+        sedReplacementString = '1s/^/' + self.stringForAddressJsFile '/'
+        subprocess.call(['sed', '-i', sedReplacementString, os.path.join(self.paths['uniswap_source_code_dir'], 'ducks', 'addresses.js')])
+    
+    def performTextReplacements():
+        for (root, dirs, files) in os.walk(self.uniswap_source_code_dir):
+            for name in files:
+            for (key, value) in replaceDict.items():
+                sedCommandSingleQuotes = 's/\'' + key + '\'/\'' + value + '\'/g'
+                sedCommandDoubleQuotes = 's/\"' + key + '\"/\"' + value + '\"/g'
+                print(os.path.join(root, name))
+                print(sedCommandSingleQuotes)
+                print(sedCommandDoubleQuotes)
+                subprocess.call(['sed', '-ir', sedCommandSingleQuotes, os.path.join(root, name)])
+                subprocess.call(['sed', '-ir', sedCommandDoubleQuotes, os.path.join(root, name)])
+
+    def performImageCopying()
+        for (root, dirs, files) in os.walk(self.uniswap_source_code_dir):
+            for name in files:
+                copy2(os.path.join(root, name), self.uniswap_image_dir)
+    # CLASS METHODS - END
+
+# DRIVER - START
+uniswapPort = UP()
+uniswap.housekeeping()
+uniswap.fetchUniswapSourceCode()
+uniswap.unpackUniswapSourceCode()
+uniswapPort.runBuildAddresses()
+uniswapPort.pairExchangeAndTokenAddresses()
+uniswapPort.createStringForAddressJsFile()
+uniswapPort.writeStringForAddressFile()
+uniswapPort.performTextReplacements()
+uniswapPort.performImageCopying()
+# DRIVER - END
+
