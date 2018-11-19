@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import shutil
 import requests
@@ -32,11 +33,13 @@ class UP:
         for (ufaKey, ufaValue) in self.urls.items():
             print(ufaKey + ": " + ufaValue)
 
-        self.networkName = config['blockchain']['networkName']
-        print("networkName: " + self.networkName)
-
-        self.networkId = config['blockchain']['networkId']
-        print("networkId: " + self.networkId)
+        self.blockchain = {}
+        for key in config['blockchain']:
+            stringKey = str(key)
+            self.blockchain[stringKey] = config['blockchain'][key]
+        print("\nBlockchain:")
+        for (ufaKey, ufaValue) in self.blockchain.items():
+            print(ufaKey + ": " + ufaValue)
 
         self.uniswapFactoryAddress = config['uniswapFactoryAddress']['factoryAddress']
         print("factoryAddress: " + self.uniswapFactoryAddress)
@@ -149,7 +152,7 @@ class UP:
     def createStringForAddressJsFile(self):
         print('Operating out of path: ' + os.getcwd())
         print('Creating final string for address.js file...')
-        self.stringForAddressJsFile = self.stringForAddressJsFile + 'const ' + self.networkName.upper() + ' = ' + json.dumps(self.addressJsData, indent=4) + ";\n"
+        self.stringForAddressJsFile = self.stringForAddressJsFile + 'const ' + self.blockchain['test_net'].upper() + ' = ' + json.dumps(self.addressJsData, indent=4) + ";\n"
         print(self.stringForAddressJsFile)
 
     def writeStringForAddressFile(self):
@@ -192,9 +195,46 @@ class UP:
             for name in files:
                 print('Copying: ' + os.path.join(root,name) + " to " + self.paths['uniswap_image_dir'])
                 shutil.copy2(os.path.join(root, name), self.paths['uniswap_image_dir'])
+    
+    def caseSensitiveReplace(self, string, old, new):
+        # Attribution https://stackoverflow.com/a/17729686/5500769 user:341329
+        def repl(match):
+            current = match.group()
+            result = ''
+            all_upper=True
+            for i,c in enumerate(current):
+                if i >= len(new):
+                    break
+                if c.isupper():
+                    result += new[i].upper()
+                else:
+                    result += new[i].lower()
+                    all_upper=False
+            if all_upper:
+                result += new[i+1:].upper()
+            else:
+                result += new[i+1:].lower()
+            return result
+        regex = re.compile(re.escape(old), re.I)
+        return regex.sub(repl, string)
 
     def editPackageJson(self):
         print('Editing core package file to create npm start command')
+        with open(self.paths['uniswap_package_json_file'], 'r') as pjf:
+            self.packageJsonDict = json.load(pjf)
+            tempDicts = {}
+        for (key, value) in self.packageJsonDict['scripts'].items():
+            if 'rinkeby' in str(key):
+                newKey1 = self.caseSensitiveReplace(key, self.blockchain['uniswap_test_net'], self.blockchain['test_net'])
+                newValue1 = self.caseSensitiveReplace(value, self.blockchain['uniswap_test_net'], self.blockchain['test_net'])
+                newValue2 = self.caseSensitiveReplace(newValue1, self.blockchain['uniswap_test_net_id'], self.blockchain['test_net_id'])
+                print(newKey1)
+                print(newValue2)
+                tempDicts[newKey1] = [newValue2]
+        for (key, value) in tempDicts.items():
+            self.packageJsonDict['scripts'][key] = value
+        with open(self.paths['uniswap_package_json_file'], 'w') as pjfW:
+            pjfW.write(json.dumps(self.packageJsonDict, indent=4))
 
     def printMessage(self):
         print("Porting complete")
@@ -214,6 +254,7 @@ uniswapPort.createStringForAddressJsFile()
 uniswapPort.writeStringForAddressFile()
 uniswapPort.performTextReplacements()
 uniswapPort.performImageCopying()
+uniswapPort.editPackageJson()
 uniswapPort.printMessage()
 # DRIVER - END
 
