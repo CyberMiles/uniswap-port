@@ -129,8 +129,8 @@ class UP:
         self.stringForAddressJsFile = self.stringForAddressJsFile + 'const ' + self.networkName.upper() + ' = ' + json.dumps(self.addressJsData, indent=4) + ";\n"
     
     def writeStringForAddressFile(self):
-        sedReplacementString = '1s/^/' + self.stringForAddressJsFile + '/'
-        subprocess.call(['sed', '-i', sedReplacementString, os.path.join(self.paths['uniswap_source_code_dir'], 'ducks', 'addresses.js')])
+        sedReplacementString = '1s/^/' + self.stringForAddressJsFile + '/ '
+        subprocess.call(['sed', '-ir', sedReplacementString, os.path.join(self.paths['uniswap_source_code_dir'], 'ducks', 'addresses.js')])
     
     def performTextReplacements(self):
         for (root, dirs, files) in os.walk(self.paths['uniswap_source_code_dir']):
@@ -138,14 +138,14 @@ class UP:
                 for (key, value) in self.multicaseTextReplacements.items():
                     sedCommandSingleQuotes = 's/\'' + key + '\'/\'' + value + '\'/g'
                     sedCommandDoubleQuotes = 's/\"' + key + '\"/\"' + value + '\"/g'
-                    print(os.path.join(root, name))
-                    print(sedCommandSingleQuotes)
-                    print(sedCommandDoubleQuotes)
+                    print("Processing: " + os.path.join(root, name))
+                    #print(sedCommandSingleQuotes)
+                    #print(sedCommandDoubleQuotes)
                     subprocess.call(['sed', '-ir', sedCommandSingleQuotes, os.path.join(root, name)])
                     subprocess.call(['sed', '-ir', sedCommandDoubleQuotes, os.path.join(root, name)])
 
     def performImageCopying(self):
-        for (root, dirs, files) in os.walk(self.paths['uniswap_source_code_dir']):
+        for (root, dirs, files) in os.walk('./images'):
             for name in files:
                 copy2(os.path.join(root, name), self.paths['uniswap_image_dir'])
     # CLASS METHODS - END
