@@ -238,8 +238,13 @@ class UP:
 
     def printMessage(self):
         print("Porting complete")
-        print("To verify filenames containing the string \"ethereum\" please use the following find command")
-        print("find " + self.paths['uniswap_base_dir'] + " -name \"*ethereum*\" -print")
+        #print("To verify filenames containing the string \"ethereum\" please use the following find command")
+        #print("find " + self.paths['uniswap_base_dir'] + " -name \"*ethereum*\" -print")
+        print("Please install yarn)
+        print('''https://yarnpkg.com/lang/en/docs/install/#debian-stable''')
+        print("To run Uniswap, type the following commands in the " + self.paths['uniswap_base_dir'] + " directory") 
+        print("npm install")
+        print("yarn start:travis --loglevel verbose")
     # CLASS METHODS - END
 
 # DRIVER - START
