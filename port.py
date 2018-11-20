@@ -6,7 +6,6 @@ import requests
 import fileinput
 import subprocess
 import configparser
-
 from zipfile import ZipFile
 
 class UP: 
@@ -93,7 +92,6 @@ class UP:
     # READ CONFIGURATION (uniswap.ini) INTO CLASS VARIABLES - END
 
     # CLASS METHODS - START
-
     def cleanUp(self):
         if (os.path.isdir(self.paths['uniswap_zip_download_location'])):
             print('Removing ' + self.paths['uniswap_zip_download_location'] + ' now because we want a clean slate!')
