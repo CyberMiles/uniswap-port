@@ -238,9 +238,14 @@ class UP:
         print("Porting complete")
         #print("To verify filenames containing the string \"ethereum\" please use the following find command")
         #print("find " + self.paths['uniswap_base_dir'] + " -name \"*ethereum*\" -print")
-        print("Please install yarn by following the instructions at the following URL")
+        print("\nPlease install yarn by following the instructions at the following URL")
         print('''https://yarnpkg.com/lang/en/docs/install/#debian-stable''')
-        print("\nTo run Uniswap, type the following commands in the " + self.paths['uniswap_base_dir'] + " directory") 
+        
+        print("\nPlease install npm by typing the following command")
+        print("sudo apt-get install npm")
+        
+        print("\nTo run Uniswap, type the following commands")
+        print("cd " + self.paths['uniswap_base_dir']) 
         print("npm install")
         print("yarn start:travis --loglevel verbose")
     # CLASS METHODS - END
