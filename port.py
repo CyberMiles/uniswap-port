@@ -241,8 +241,8 @@ class UP:
         print("\nPlease install yarn by following the instructions at the following URL")
         print('''https://yarnpkg.com/lang/en/docs/install/#debian-stable''')
         
-        print("\nPlease install npm by typing the following command")
-        print("sudo apt-get install npm")
+        print("\nPlease install node by following the instructions at the following URL")
+        print("https://github.com/nodesource/distributions/blob/master/README.md#debinstall")
         
         print("\nTo run Uniswap, type the following commands")
         print("cd " + self.paths['uniswap_base_dir']) 
