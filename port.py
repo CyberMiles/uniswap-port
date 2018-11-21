@@ -236,8 +236,12 @@ class UP:
 
     def printMessage(self):
         print("Porting complete")
-        #print("To verify filenames containing the string \"ethereum\" please use the following find command")
+        #print("To investigate filenames containing the string \"ethereum\" please use the following find command")
         #print("find " + self.paths['uniswap_base_dir'] + " -name \"*ethereum*\" -print")
+        
+        #print("To investigate instances of the string \"ethereum\" in any and all files, please use the following grep command")
+        #print("grep -rnw " + "\'" + self.paths['uniswap_base_dir'] + "\'"+ " -e \'ethereum\'")
+        
         print("\nPlease install yarn by following the instructions at the following URL")
         print('''https://yarnpkg.com/lang/en/docs/install/#debian-stable''')
         
