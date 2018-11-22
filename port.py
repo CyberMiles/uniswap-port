@@ -61,25 +61,25 @@ class UP:
         for (ufaKey, ufaValue) in self.uniswapExchangeAddresses.items():
             print(ufaKey + ": " + ufaValue)
 
-        self.multicaseTextReplacements = {}
-        for key in config['multicaseTextReplacements']:
+        self.quotedTextReplacements = {}
+        for key in config['quotedTextReplacements']:
             stringKey = str(key)
             upperStringKey = stringKey.upper()
-            self.multicaseTextReplacements[stringKey] = config['multicaseTextReplacements'][stringKey]
-            valueToConvert = config['multicaseTextReplacements'][stringKey]
-            self.multicaseTextReplacements[stringKey.capitalize()] = str(valueToConvert).capitalize()
-            self.multicaseTextReplacements[stringKey.upper()] = str(valueToConvert).upper()
-            self.multicaseTextReplacements[key] = config['multicaseTextReplacements'][key]
-        print("\nMulticaseTextReplacements:")
-        for (ufaKey, ufaValue) in self.multicaseTextReplacements.items():
+            self.multicaseTextReplacements[stringKey] = config['quotedTextReplacements'][stringKey]
+            valueToConvert = config['quotedTextReplacements'][stringKey]
+            self.quotedTextReplacements[stringKey.capitalize()] = str(valueToConvert).capitalize()
+            self.quotedTextReplacements[stringKey.upper()] = str(valueToConvert).upper()
+            self.quotedTextReplacements[key] = config['quotedTextReplacements'][key]
+        print("\QuotedTextReplacements:")
+        for (ufaKey, ufaValue) in self.quotedTextReplacements.items():
             print(ufaKey + ": " + ufaValue)
 
-        self.lowerCaseTextReplacements = {}
-        for key in config['lowerCaseTextReplacements']:
+        self.unquotedTextReplacements = {}
+        for key in config['unquotedTextReplacements']:
             stringKey = str(key)
-            self.lowerCaseTextReplacements[stringKey] = config['lowerCaseTextReplacements'][stringKey]
-        print("\nLowerCaseTextReplacements:")
-        for (ufaKey, ufaValue) in self.lowerCaseTextReplacements.items():
+            self.unquotedTextReplacements[stringKey] = config['unquotedTextReplacements'][stringKey]
+        print("\UnquotedTextReplacements:")
+        for (ufaKey, ufaValue) in self.unquotedTextReplacements.items():
             print(ufaKey + ": " + ufaValue)
 
         self.paths = {}
@@ -171,20 +171,29 @@ class UP:
         os.remove(self.paths['uniswap_addresses_js_file'])
         os.rename(temp_data_2, self.paths['uniswap_addresses_js_file'])
 
-    def performTextReplacements(self):
+    def textReplacementFunction(self, configData, quotes):
+        # This function will replace any text 
         print('Operating out of path: ' + os.getcwd())
         print('Performing text replacement in each individual file...')
         for (root, dirs, files) in os.walk(self.paths['uniswap_source_code_dir']):
             for name in files:
                 print("Processing: " + os.path.join(root, name))
-                for (key, value) in self.multicaseTextReplacements.items():
-                    sedCommandSingleQuotes = 's/\'' + key + '\'/\'' + value + '\'/g'
-                    sedCommandDoubleQuotes = 's/\"' + key + '\"/\"' + value + '\"/g'
-                    #print(sedCommandSingleQuotes)
-                    #print(sedCommandDoubleQuotes)
-                    subprocess.call(['sed', '-ir', sedCommandSingleQuotes, os.path.join(root, name)])
-                    subprocess.call(['sed', '-ir', sedCommandDoubleQuotes, os.path.join(root, name)])
-
+                for (key, value) in configData:
+                    if(quotes == 2):
+                        sedCommand = 's/\"' + key + '\"/\"' + value + '\"/g'
+                    elif(quotes == 1):
+                        sedCommand = 's/\'' + key + '\'/\'' + value + '\'/g'
+                    elif(quotes == 0):
+                        sedCommand = 's/' + key + '/' + value + '/g'
+                    subprocess.call(['sed', '-ir', sedCommand, os.path.join(root, name)])
+                    
+    def performTextReplacements(self):
+        # Call the text replacement function 0 = no quotes, 1 = single quotes and 2 = double quotes
+        textReplacementFunction(self.quotedTextReplacements.items(), 2)
+        textReplacementFunction(self.quotedTextReplacements.items(), 1)
+        textReplacementFunction(self.unquotedTextReplacements.items(), 0)
+        
+        
     def performImageCopying(self):
         print('Operating out of path: ' + os.getcwd())
         print('Changing directories to ' + self.scriptExecutionLocation)
