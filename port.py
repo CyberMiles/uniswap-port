@@ -117,7 +117,8 @@ class UP:
         print('Operating out of path: ' + os.getcwd())
         print('Unpacking Uniswap source code...')
         with ZipFile(self.paths['uniswap_zip_download_location'], 'r') as zip: 
-            zip.extractall() 
+            zip.extractall()
+        os.remove(self.paths['uniswap_zip_download_location'])
 
     def buildAddress(self, items, addressType):
         print('Operating out of path: ' + os.getcwd())
