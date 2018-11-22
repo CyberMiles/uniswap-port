@@ -189,9 +189,9 @@ class UP:
                     
     def performTextReplacements(self):
         # Call the text replacement function 0 = no quotes, 1 = single quotes and 2 = double quotes
-        textReplacementFunction(self.quotedTextReplacements.items(), 2)
-        textReplacementFunction(self.quotedTextReplacements.items(), 1)
-        textReplacementFunction(self.unquotedTextReplacements.items(), 0)
+        self.textReplacementFunction(self.quotedTextReplacements.items(), 2)
+        self.textReplacementFunction(self.quotedTextReplacements.items(), 1)
+        self.textReplacementFunction(self.unquotedTextReplacements.items(), 0)
         
         
     def performImageCopying(self):
