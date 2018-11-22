@@ -65,7 +65,7 @@ class UP:
         for key in config['quotedTextReplacements']:
             stringKey = str(key)
             upperStringKey = stringKey.upper()
-            self.multicaseTextReplacements[stringKey] = config['quotedTextReplacements'][stringKey]
+            self.quotedTextReplacements[stringKey] = config['quotedTextReplacements'][stringKey]
             valueToConvert = config['quotedTextReplacements'][stringKey]
             self.quotedTextReplacements[stringKey.capitalize()] = str(valueToConvert).capitalize()
             self.quotedTextReplacements[stringKey.upper()] = str(valueToConvert).upper()
