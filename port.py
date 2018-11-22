@@ -70,7 +70,7 @@ class UP:
             self.quotedTextReplacements[stringKey.capitalize()] = str(valueToConvert).capitalize()
             self.quotedTextReplacements[stringKey.upper()] = str(valueToConvert).upper()
             self.quotedTextReplacements[key] = config['quotedTextReplacements'][key]
-        print("\QuotedTextReplacements:")
+        print("\nQuotedTextReplacements:")
         for (ufaKey, ufaValue) in self.quotedTextReplacements.items():
             print(ufaKey + ": " + ufaValue)
 
@@ -78,7 +78,7 @@ class UP:
         for key in config['unquotedTextReplacements']:
             stringKey = str(key)
             self.unquotedTextReplacements[stringKey] = config['unquotedTextReplacements'][stringKey]
-        print("\UnquotedTextReplacements:")
+        print("\nUnquotedTextReplacements:")
         for (ufaKey, ufaValue) in self.unquotedTextReplacements.items():
             print(ufaKey + ": " + ufaValue)
 
