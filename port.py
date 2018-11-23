@@ -131,10 +131,11 @@ class UP:
             address.append(v)
             addresses.append(address)
             address = []
-        self.addressJsData[addressType]['address'] = addresses
+        self.addressJsData[addressType]['addresses'] = addresses
 
     def runBuildAddresses(self):
         print('Operating out of path: ' + os.getcwd())
+        self.addressJsData['factoryAddress'] = self.uniswapFactoryAddress
         self.buildAddress(self.uniswapExchangeAddresses.items(), 'exchangeAddresses')
         self.buildAddress(self.uniswapTokenAddresses.items(), 'tokenAddresses')
 
