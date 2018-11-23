@@ -262,7 +262,7 @@ class UP:
         print("\nTo run Uniswap, type the following commands")
         print("cd " + self.paths['uniswap_base_dir']) 
         print("npm install")
-        print("yarn start:travis --loglevel verbose")
+        print("yarn start:" + self.blockchain['test_net'] + " --loglevel verbose")
     # CLASS METHODS - END
 
 # DRIVER - START
