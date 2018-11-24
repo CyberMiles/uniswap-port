@@ -19,7 +19,7 @@ class UP:
 
         # READ CONFIGURATION (uniswap.ini) INTO CLASS VARIABLES - START
         print("Reading configuration file, uniswap.ini")
-        config = configparser.ConfigParser()
+        config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
         config.read('uniswap.ini')
 
         print("Configuration is as follows ...")
