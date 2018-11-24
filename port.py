@@ -274,8 +274,8 @@ class UP:
         print("\nPlease make a couple of really quick changes as outlined at the following URL")
         print("See https://github.com/CyberMiles/uniswap-port/issues/2")
         
-        print("Save the following text for later use.")
-        print("\nTo run Uniswap, type the following commands")
+        print("\nSave the following text for later use.")
+        print("To run Uniswap, type the following commands")
         print("cd " + self.paths['uniswap_base_dir']) 
         print("npm install")
         print("yarn start:" + self.blockchain['test_net'] + " --loglevel verbose")
