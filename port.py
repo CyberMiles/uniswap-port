@@ -109,27 +109,23 @@ class UP:
             shutil.rmtree(self.paths['uniswap_base_dir'])
 
     def housekeeping(self):
-        print('Operating out of path: ' + os.getcwd())
-        print('Changing directories...')
+        print('\nChanging directories...')
         os.chdir(self.paths['home_dir'])
         print('Operating out of path: ' + os.getcwd())
 
     def fetchUniswapSourceCode(self):
-        print('Operating out of path: ' + os.getcwd())
         print('Fetching Uniswap source code from ' + self.urls['uniswap_source_code'])
         r = requests.get(self.urls['uniswap_source_code'])
         with open(self.paths['uniswap_zip_download_location'], 'wb') as f:
             f.write(r.content)
 
     def unpackUniswapSourceCode(self):
-        print('Operating out of path: ' + os.getcwd())
         print('Unpacking Uniswap source code...')
         with ZipFile(self.paths['uniswap_zip_download_location'], 'r') as zip: 
             zip.extractall()
         os.remove(self.paths['uniswap_zip_download_location'])
 
     def buildAddress(self, items, addressType):
-        print('Operating out of path: ' + os.getcwd())
         print("Creating " + addressType + " configuration...")
         self.addressJsData[addressType] = {}
         addresses = []
@@ -142,13 +138,11 @@ class UP:
         self.addressJsData[addressType]['addresses'] = addresses
 
     def runBuildAddresses(self):
-        print('Operating out of path: ' + os.getcwd())
         self.addressJsData['factoryAddress'] = self.uniswapFactoryAddress
         self.buildAddress(self.uniswapExchangeAddresses.items(), 'exchangeAddresses')
         self.buildAddress(self.uniswapTokenAddresses.items(), 'tokenAddresses')
 
     def pairExchangeAndTokenAddresses(self):
-        print('Operating out of path: ' + os.getcwd())
         print("Creating exchange and token pairing configuration...")
         fromToken = {}
         for (k1, v1) in self.uniswapTokenAddresses.items():
@@ -158,13 +152,11 @@ class UP:
         self.addressJsData['exchangeAddresses']['fromToken'] = fromToken
 
     def createStringForAddressJsFile(self):
-        print('Operating out of path: ' + os.getcwd())
         print('Creating final string for address.js file...')
         self.stringForAddressJsFile = self.stringForAddressJsFile + 'const ' + self.blockchain['test_net'].upper() + ' = ' + json.dumps(self.addressJsData, indent=4) + ";\n"
         print(self.stringForAddressJsFile)
 
     def writeStringForAddressFile(self):
-        print('Operating out of path: ' + os.getcwd())
         print('Writing final string to address.js file at: ' + self.paths['uniswap_addresses_js_file'])
         # This can be done with sed (as demonstrated in the following 2 lines) but I think the formatting of the output file is important so I will do it with Python fileinput
         #sedReplacementString = '1s/^/' + self.stringForAddressJsFile + '/'
@@ -182,14 +174,12 @@ class UP:
 
     def textReplacementFunction(self, configData, quotes, ignore = False):
         # This function will replace any text 
-        print('Operating out of path: ' + os.getcwd())
         print('Performing text replacement in each individual file...')
         for (root, dirs, files) in os.walk(self.paths['uniswap_source_code_dir']):
             for name in files:
                 print("Processing: " + os.path.join(root, name))
                 for (key, value) in configData:
                     skip = False
-                    print(str(key))
                     if(ignore != False):
                         for(k, v) in ignore:
                             if(key == k):
@@ -217,7 +207,6 @@ class UP:
         
         
     def performImageCopying(self):
-        print('Operating out of path: ' + os.getcwd())
         print('Changing directories to ' + self.scriptExecutionLocation)
         os.chdir(self.scriptExecutionLocation)
         print('Copying image files...')
