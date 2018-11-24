@@ -180,7 +180,7 @@ class UP:
         os.remove(self.paths['uniswap_addresses_js_file'])
         os.rename(temp_data_2, self.paths['uniswap_addresses_js_file'])
 
-    def textReplacementFunction(self, configData, ignore = False, quotes):
+    def textReplacementFunction(self, configData, quotes, ignore = False):
         # This function will replace any text 
         print('Operating out of path: ' + os.getcwd())
         print('Performing text replacement in each individual file...')
@@ -206,7 +206,7 @@ class UP:
         self.textReplacementFunction(self.quotedTextReplacements.items(), 2)
         # Deliberately ignore the text 'ethereum' which is surrounded in single quotes 
         # See https://github.com/CyberMiles/uniswap-port/issues/3 for more details
-        self.textReplacementFunction(self.quotedTextReplacements.items(), self.ignoreThisTextInThisFile.items(), 1)
+        self.textReplacementFunction(self.quotedTextReplacements.items(), 1, self.ignoreThisTextInThisFile.items())
         self.textReplacementFunction(self.unquotedTextReplacements.items(), 0)
         
         
