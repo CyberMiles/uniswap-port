@@ -89,6 +89,14 @@ class UP:
         print("\nPaths:")
         for (ufaKey, ufaValue) in self.paths.items():
             print(ufaKey + ": " + ufaValue)
+            
+        self.ignoreThisTextInThisFile = {}
+        for key in config['ignoreThisTextInThisFile']:
+            stringKey = str(key)
+            self.ignoreThisTextInThisFile[stringKey] = config['ignoreThisTextInThisFile'][key]
+        print("\nIgnoreThisTextInThisFile:")
+        for (ufaKey, ufaValue) in self.ignoreThisTextInThisFile.items():
+            print(ufaKey + ": " + ufaValue)
     # READ CONFIGURATION (uniswap.ini) INTO CLASS VARIABLES - END
 
     # CLASS METHODS - START
@@ -172,7 +180,7 @@ class UP:
         os.remove(self.paths['uniswap_addresses_js_file'])
         os.rename(temp_data_2, self.paths['uniswap_addresses_js_file'])
 
-    def textReplacementFunction(self, configData, quotes):
+    def textReplacementFunction(self, configData, ignore = False, quotes):
         # This function will replace any text 
         print('Operating out of path: ' + os.getcwd())
         print('Performing text replacement in each individual file...')
@@ -180,6 +188,11 @@ class UP:
             for name in files:
                 print("Processing: " + os.path.join(root, name))
                 for (key, value) in configData:
+                    if(ignore != False && str(key) in ignore):
+                        if(ignore[str(key)] == str(os.path.join(root, name)):
+                           print("Skipping the replacement of " + str(key) + " in the file " + str(os.path.join(root, name))
+                           # fall out of this iteration of the configData for loop and continue on with the rest of the configData
+                           continue
                     if(quotes == 2):
                         sedCommand = 's/\"' + key + '\"/\"' + value + '\"/g'
                     elif(quotes == 1):
@@ -191,7 +204,9 @@ class UP:
     def performTextReplacements(self):
         # Call the text replacement function 0 = no quotes, 1 = single quotes and 2 = double quotes
         self.textReplacementFunction(self.quotedTextReplacements.items(), 2)
-        self.textReplacementFunction(self.quotedTextReplacements.items(), 1)
+        # Deliberately ignore the text 'ethereum' which is surrounded in single quotes 
+        # See https://github.com/CyberMiles/uniswap-port/issues/3 for more details
+        self.textReplacementFunction(self.quotedTextReplacements.items(), self.ignoreThisTextInThisFile.items(), 1)
         self.textReplacementFunction(self.unquotedTextReplacements.items(), 0)
         
         
