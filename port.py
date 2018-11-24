@@ -189,7 +189,7 @@ class UP:
                 print("Processing: " + os.path.join(root, name))
                 for (key, value) in configData:
                     if(ignore != False and str(key) in ignore):
-                        if(ignore[str(key)] == str(os.path.join(root, name)):
+                        if(ignore[str(key)] == str(os.path.join(root, name))):
                            print("Skipping the replacement of " + str(key) + " in the file " + str(os.path.join(root, name))
                            # fall out of this iteration of the configData for loop and continue on with the rest of the configData
                            continue
