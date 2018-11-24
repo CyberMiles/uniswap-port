@@ -263,7 +263,8 @@ class UP:
         #print("To investigate instances of the string \"ethereum\" in any and all files, please use the following grep command")
         #print("grep -rnw " + "\'" + self.paths['uniswap_base_dir'] + "\'"+ " -e \'ethereum\'")
         
-        print("Almost there ...")
+        print("\n\n\n*******MESSAGE********")
+        print("OK, almost there ...")
         print("\nPlease install yarn by following the instructions at the following URL")
         print('''https://yarnpkg.com/lang/en/docs/install/#debian-stable''')
         
