@@ -271,7 +271,7 @@ class UP:
         print("\nPlease install node by following the instructions at the following URL")
         print("https://github.com/nodesource/distributions/blob/master/README.md#debinstall")
         
-        print("\nPlease make a couple of really quick changes as outlined at the following URL")
+        print("\nPlease make a couple of really quick changes to the " + self.paths['uniswap_addresses_js_file'] + " file, as outlined at the following URL")
         print("See https://github.com/CyberMiles/uniswap-port/issues/2")
         
         print("\nSave the following text for later use.")
