@@ -193,7 +193,7 @@ class UP:
                     if(ignore != False):
                         for(k, v) in ignore:
                             if(key == k):
-                                if(v = str(os.path.join(root, name))):
+                                if(v == str(os.path.join(root, name))):
                                     print("Skipping the replacement of " + str(key) + " in the file " + str(os.path.join(root, name)))
                                     # fall out of this iteration of the configData for loop and continue on with the rest of the configData
                                     skip = True
