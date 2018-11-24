@@ -188,11 +188,17 @@ class UP:
             for name in files:
                 print("Processing: " + os.path.join(root, name))
                 for (key, value) in configData:
-                    if(ignore != False and str(key) in ignore):
-                        if(ignore[str(key)] == str(os.path.join(root, name))):
-                           print("Skipping the replacement of " + str(key) + " in the file " + str(os.path.join(root, name)))
-                           # fall out of this iteration of the configData for loop and continue on with the rest of the configData
-                           continue
+                    skip = False
+                    print(str(key))
+                    if(ignore != False):
+                        for(k, v) in ignore:
+                            if(key == k)):
+                                if(v = str(os.path.join(root, name)):
+                                    print("Skipping the replacement of " + str(key) + " in the file " + str(os.path.join(root, name)))
+                                    # fall out of this iteration of the configData for loop and continue on with the rest of the configData
+                                    skip = True
+                    if(skip == True):
+                        continue
                     if(quotes == 2):
                         sedCommand = 's/\"' + key + '\"/\"' + value + '\"/g'
                     elif(quotes == 1):
