@@ -256,19 +256,24 @@ class UP:
             pjfW.write(json.dumps(self.packageJsonDict, indent=4))
 
     def printMessage(self):
-        print("Porting complete")
+
         #print("To investigate filenames containing the string \"ethereum\" please use the following find command")
         #print("find " + self.paths['uniswap_base_dir'] + " -name \"*ethereum*\" -print")
         
         #print("To investigate instances of the string \"ethereum\" in any and all files, please use the following grep command")
         #print("grep -rnw " + "\'" + self.paths['uniswap_base_dir'] + "\'"+ " -e \'ethereum\'")
         
+        print("Almost there ...")
         print("\nPlease install yarn by following the instructions at the following URL")
         print('''https://yarnpkg.com/lang/en/docs/install/#debian-stable''')
         
         print("\nPlease install node by following the instructions at the following URL")
         print("https://github.com/nodesource/distributions/blob/master/README.md#debinstall")
         
+        print("\nPlease make a couple of really quick changes as outlined at the following URL")
+        print("See https://github.com/CyberMiles/uniswap-port/issues/2")
+        
+        print("Save the following text for later use.")
         print("\nTo run Uniswap, type the following commands")
         print("cd " + self.paths['uniswap_base_dir']) 
         print("npm install")
