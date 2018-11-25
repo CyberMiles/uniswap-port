@@ -268,6 +268,9 @@ class UP:
         print("\nPlease install yarn by following the instructions at the following URL")
         print('''https://yarnpkg.com/lang/en/docs/install/#debian-stable''')
         
+        print("You will need build-essential, if you done already have it installed")
+        print("sudo apt-get install build-essential")
+        
         print("\nPlease install node by following the instructions at the following URL")
         print("https://github.com/nodesource/distributions/blob/master/README.md#debinstall")
         
