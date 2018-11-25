@@ -265,3 +265,40 @@ success https://testnet.cmttracking.io/tx/0x7bc5762621bcb3633a040075c4b8d75c4809
 "0xbac61b8ab71e165f9867fc3cc36799d99f681d61"
 > deployednewUniswapFactoryAbiContract.getToken("0xbac61b8ab71e165f9867fc3cc36799d99f681d61")
 "0x1f6a6c91bed48f02ec656204a607acd82ce8f19e"
+
+
+This is us now reviving the contracts and testing
+> var EEE = web3.cmt.contract(uniswapExchangeAbi);
+> deployedEEE = EEE.at("0xbac61b8ab71e165f9867fc3cc36799d99f681d61")
+
+> deployedEEE.tokenAddress()
+"0x1f6a6c91bed48f02ec656204a607acd82ce8f19e" //matches NNN token
+
+> deployedEEE.factoryAddress()
+"0x82c97282070ac866e3c3462d1ad922fa9f6e704c" //matches the Factory which we instantiated above
+
+> deployedEEE.totalSupply()
+0 // No liquidity in the exchange ... yet ;-)
+
+//Adding liquidity
+
+> amounty = web3.fromWei(100000000000000000000, 'cmt')
+> deployedEEE.addLiquidity(0, amounty, 1642075763, {from:accountB})
+"0xafdd12111d354a0937d73af6f07ef32743ebb8637321b57f1ba8b9328e82568b"
+
+
+NOT SURE IF BELOW IS NEEDED BECAUSE WE ARE CALLING WITH NLOCKED ACCOUNT
+> deployedSTC.allowance(accountB, deployedEEE.address)
+0 // There is no allowance between the user and the exchange contract address (this is created as the user unlocks in the GUI)
+
+But we are going to do this ourselves
+> amounty = web3.fromWei(100000000000000000000, 'cmt')
+> deployedSTC.approve(accountB, amounty, {from:accountB})
+//This fails https://testnet.cmttracking.io/tx/0xafdd12111d354a0937d73af6f07ef32743ebb8637321b57f1ba8b9328e82568b
+
+
+
+
+
+
+
