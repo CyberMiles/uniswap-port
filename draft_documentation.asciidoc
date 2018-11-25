@@ -48,6 +48,18 @@ Get the deployed contract's address for future use (i.e. creating Uniswap exchan
 deployedSmartTokenContract.address
 //0x8cb0dcacee123a8d283f1899686cef71f6cb986c
 ----
+
+We will also create another token here for testing purposes
+[source, javascript]
+----
+var deployedSmartTokenContractZZZ = newSmartTokenContract.new("Z Token","ZZZ","18",{from:accountA, data: smartTokenBytecode, gas:"5000000"}, function(error, result){if(!error){console.log(result)}else{console.log(error)}});
+----
+[source, javascript]
+----
+deployedSmartTokenContractZZZ.address
+"0x01bae44a7df065d14cff4b6ea4652a44ef0bf2d8"
+----
+
 Call a couple of the functions to test it out
 [source, javascript]
 ----
@@ -191,4 +203,65 @@ deployedNewZGUniswapExchangeContract.address
 //"0xd1813b45b4316213c3f113d09720fa61061db40f"
 ----
 
+We can check the relationship between the user account which is wanting to add liquidity to the exchange contract and the exchange address via the token contract's allowance function.
+[source, javascript]
+----
+deployedSmartTokenContract.allowance(accountB, "0xf1ce158d9e2be2970fb6c3677a6c20ba161c0ccb")
+0
+----
+At this early stage the above call should return 0. This will be increased only when the user has approved the "unlock" on the uniswap fronten.
 
+
+THIS IS AN UPDATE AFTER NEW KNOWLEDGE DISCOVERED
+WORK CONTINUES
+
+Create a new owner
+
+> personal.newAccount("asdfasdfasdf")
+"0x0dbc262775545bf477efdcc6d9031850113c9e80"
+> factoryOwner = "0x0dbc262775545bf477efdcc6d9031850113c9e80"
+"0x0dbc262775545bf477efdcc6d9031850113c9e80"
+
+> web3.fromWei(cmt.getBalance(factoryOwner), 'cmt')
+1000
+
+//EXCHANGE
+> var newUSE = web3.cmt.contract(uniswapExchangeAbi,function(error, result){if(!error){console.log(result)}else{console.log(error)}});
+
+
+> var deployednewUSE = newUSE.new({from:factoryOwner, data: uniswapExchangeBytecode, gas:"5000000"}, function(error, result){if(!error){console.log(result)}else{console.log(error)}});
+
+
+> deployednewUSE.address
+
+"0x8264550e2833db2ac746e58ad80961d22d70510a"
+
+//FACTORY
+> var newUniswapFactoryAbiContract = web3.cmt.contract(uniswapFactoryAbi, function(error, result){if(!error){console.log(result)}else{console.log(error)}});
+
+> var deployednewUniswapFactoryAbiContract = newUniswapFactoryAbiContract.new({from:factoryOwner, data: uniswapFactoryBytecode, gas:"5000000"}, function(error, result){if(!error){console.log(result)}else{console.log(error)}});
+
+> deployednewUniswapFactoryAbiContract.address
+"0x82c97282070ac866e3c3462d1ad922fa9f6e704c"
+
+//CALL initializeFactory
+> deployednewUniswapFactoryAbiContract.initializeFactory("0x8264550e2833db2ac746e58ad80961d22d70510a", {from:factoryOwner})
+success https://testnet.cmttracking.io/tx/0x7bc5762621bcb3633a040075c4b8d75c48093ba3ec2f0076505f74b3513e7e54
+
+//NEW TOKEN
+> var newSTC = web3.cmt.contract(smartTokenAbi, function(error, result){if(!error){console.log(result)}else{console.log(error)}});
+
+> var deployedSTC = newSTC.new("N Token","NNN","18",{from:factoryOwner, data: smartTokenBytecode, gas:"5000000"}, function(error, result){if(!error){console.log(result)}else{console.log(error)}});
+
+> deployedSTC.address
+"0x1f6a6c91bed48f02ec656204a607acd82ce8f19e"
+
+//Create exchange
+> deployednewUniswapFactoryAbiContract.createExchange(deployedSTC.address, {from:factoryOwner})
+
+
+//Run the functions of the factory contract to get the actual exchange contract (because you cant just use the deployed address of the template contract it must be the get exchange address which is shown below)
+> deployednewUniswapFactoryAbiContract.getExchange(deployedSTC.address)
+"0xbac61b8ab71e165f9867fc3cc36799d99f681d61"
+> deployednewUniswapFactoryAbiContract.getToken("0xbac61b8ab71e165f9867fc3cc36799d99f681d61")
+"0x1f6a6c91bed48f02ec656204a607acd82ce8f19e"
