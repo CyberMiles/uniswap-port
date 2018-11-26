@@ -341,6 +341,56 @@ var existingExchangeContract = web3.cmt.contract(exchangeAbi)
 
 var deployedExchangeContract = existingExchangeContract.at("0xbac61b8ab71e165f9867fc3cc36799d99f681d61")
 
+## Testing it out
 
+[source, javascript]
+----
+> deployedSmartTokenContract.address
+"0x1f6a6c91bed48f02ec656204a607acd82ce8f19e"
+> deployedSmartTokenContract.symbol()
+"NNN"
+> deployedExchangeContract.tokenAddress()
+"0x1f6a6c91bed48f02ec656204a607acd82ce8f19e"
+> deployedExchangeContract.factoryAddress()
+"0x82c97282070ac866e3c3462d1ad922fa9f6e704c"
+> deployedFactoryContract.exchangeTemplate()
+"0x8264550e2833db2ac746e58ad80961d22d70510a"
+> deployedFactoryContract.tokenCount()
+1
+> deployedFactoryContract.getTokenWithId(1)
+"0x1f6a6c91bed48f02ec656204a607acd82ce8f19e"
+> deployedFactoryContract.getExchange("0x1f6a6c91bed48f02ec656204a607acd82ce8f19e")
+"0xbac61b8ab71e165f9867fc3cc36799d99f681d61"
+> deployedFactoryContract.getToken("0xbac61b8ab71e165f9867fc3cc36799d99f681d61")
+"0x1f6a6c91bed48f02ec656204a607acd82ce8f19e"
 
-
+This is all correct in relation the the addresses.js
+const MYNETWORK = {
+    "factoryAddress": "0x82c97282070ac866e3c3462d1ad922fa9f6e704c",
+    "tokenAddresses": {
+        "addresses": [
+            [
+                "NNN",
+                "0x1f6a6c91bed48f02ec656204a607acd82ce8f19e"
+            ]
+        ]
+    },
+    "exchangeAddresses": {
+        "fromToken": {
+            "0xbac61b8ab71e165f9867fc3cc36799d99f681d61": "0x1f6a6c91bed48f02ec656204a607acd82ce8f19e"
+        },
+        "addresses": [
+            [
+                "NNN",
+                "0xbac61b8ab71e165f9867fc3cc36799d99f681d61"
+            ]
+        ]
+    }
+};
+----
+The add liquidity function can not be called in the traditional way via web3-cmt.js
+So I am trying to call it like this
+[source, javascript]
+----
+deployedExchangeContract.addLiquidity.sendTransaction(0, theAmount, 1642075763,{ from:web3.cmt.accounts[1], gas:5000000, value: theAmount},function (error, result){ if(!error){ console.log(result); } else{ console.log(error); } });
+----
