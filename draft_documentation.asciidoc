@@ -388,6 +388,14 @@ const MYNETWORK = {
     }
 };
 ----
+## Adding liquidity
+Before we can add liquidity (transfer value from a tokenContractAddress to the exchangeContractAddress we must approve this spending
+[source, javascript]
+----
+> deployedSmartTokenContract.approve(deployedExchangeContract.address, web3.toWei(250, 'cmt'), {from:accountB})
+"0xe3e8db4d05d1e0db78781f1e8fbc54fae6a8e415fa9937cc87fa63fa0097bd03"
+----
+
 The add liquidity function can not be called in the traditional way via web3-cmt.js
 So I am trying to call it like this
 [source, javascript]
