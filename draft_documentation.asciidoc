@@ -473,3 +473,43 @@ web3.fromWei(deployedSmartTokenContract.balanceOf(accountB), 'cmt', {from:accoun
 > web3.fromWei(cmt.getBalance(accountB), 'cmt')
 849.952058705 //This transaction cost about 25 ETH
 ----
+
+## Purely cosmetic changes
+/home/ubuntu/uniswap-frontend-master/src/components/Header/index.js
+[source, javascript]
+----
+Change header__title from Uniswap to CyberMiles Testnet Exchange
+----
+
+/home/ubuntu/uniswap-frontend-master/public/index.html
+[source, javascript]
+----
+Change <title> from Uniswap Exchange to CyberMiles Testnet 
+Change  from unicorn to cmt.png like this <link rel="shortcut icon" href="%PUBLIC_URL%/cmt.png">
+----
+
+/home/ubuntu/uniswap-frontend-master/src/components/Logo/index.js
+Replace entire file with the following
+[source, javascript]
+----
+import React from 'react';
+import "./logo.scss";
+
+export default function Logo(props) {
+  return (
+    <div className="logo">
+    <span role="img" aria-label="logo">
+     <img src="cmt.png" alt="CMT header logo"></img>
+     </span>
+    </div>
+  );
+}
+----
+
+/home/ubuntu/uniswap-frontend-master/src/variables.scss
+Change the pinks to blue
+[source, javascript]
+----
+Change DC6BE5 to 2F80ED
+Change FF6871 to 2196f3
+----
