@@ -445,3 +445,31 @@ undefined
   value: 100000000000000000000
 }
 ----
+
+## Performing a swap Eth for Token
+[source, javascript]
+----
+// Check the current NNN token balance held by accountB
+web3.fromWei(deployedSmartTokenContract.balanceOf(accountB), 'cmt', {from:accountB})
+919.951971182709625775
+//Check the amount of CMT held by accountB
+> web3.fromWei(cmt.getBalance(accountB), 'cmt')
+874.952151545
+----
+[source, javascript]
+----
+//Set some variables (min acceptable NNN during this trade, ethAmount to trade in this trade)
+minNNN = web3.toWei(1, 'cmt')
+ethAmount = web3.toWei(25, 'cmt')
+//Make the swap
+deployedExchangeContract.ethToTokenSwapInput.sendTransaction(minNNN, 1642075763, {from: accountB, gas:5000000, value:ethAmount},function (error, result){ if(!error){ console.log(result); } else{ console.log(error); } });
+----
+[source, javascript]
+----
+// Check the current NNN token balance held by accountB
+web3.fromWei(deployedSmartTokenContract.balanceOf(accountB), 'cmt', {from:accountB})
+933.259939288568972632 //Which means that accountB received about 13 NNN tokens
+//Check the amount of CMT held by accountB
+> web3.fromWei(cmt.getBalance(accountB), 'cmt')
+849.952058705 //This transaction cost about 25 ETH
+----
