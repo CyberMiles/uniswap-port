@@ -475,10 +475,13 @@ web3.fromWei(deployedSmartTokenContract.balanceOf(accountB), 'cmt', {from:accoun
 ----
 
 ## Purely cosmetic changes
+
 /home/ubuntu/uniswap-frontend-master/src/components/Header/index.js
 [source, javascript]
 ----
 Change header__title from Uniswap to CyberMiles Testnet Exchange
+Add this just before the closing body element
+<div align="center">Powered by <a href="https://uniswap.io/">Uniswap</a></div>
 ----
 
 /home/ubuntu/uniswap-frontend-master/public/index.html
