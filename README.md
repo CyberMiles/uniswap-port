@@ -10,5 +10,5 @@ Run the port.py file
 python3 port.py
 ```
 
-## More to come
-Documentation on deploying Uniswap Vyper contracts (prior to launching the Uniswap Front)is coming soon. 
+## Deploying the Vyper contracts
+There are also [instructions on how to deploy the Vyper contracts](https://github.com/CyberMiles/uniswap-port/blob/master/deploying_uniswap_vyper_contracts.md) which underpin the system. 
