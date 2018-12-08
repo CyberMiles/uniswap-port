@@ -211,6 +211,25 @@ Or we can ask the factory contract to provide us with the token address by passi
 "0x8390513eb94287c14b3c6ef994842cededd91836"
 ```
 
+### Adding liquidity to an exchange
+
+Now that we have a factory contract, an exchange template contract and an instance of the exchange contract for the YUAN token, we can go ahead and fund the exchange by providing the first round of liquidity.
+
+Firstly we will take a look at the YUAN token
+
+```javascript
+crc20Abi = [ { "constant": true, "inputs": [], "name": "totalSupply", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "founder", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "_owner", "type": "address" } ], "name": "balanceOf", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" } ], "name": "transfer", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "freezenAmount", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "_founder", "type": "address" }, { "name": "_amount", "type": "uint256" } ], "name": "isFounderFreezen", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "freezenTime", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" } ], "name": "Transfer", "type": "event" } ]
+```
+
+```javascript
+var yuanVar = web3.cmt.contract(crc20Abi,function(error, result){if(!error){console.log(result)}else{console.log(error)}});
+undefined
+var deployedYuanToken = yuanVar.at("0x8390513eb94287c14b3c6ef994842cededd91836")
+undefined
+deployedYuanToken.totalSupply()
+1000000
+```
+
 ### Restoring web3 variables in a new session
 The following commands will quickly restore the web3 variables in the event that a new web3 session was started. You will notice that we are using the contract addresses from the above example. Obviously you would have to replace the addresses in the following commands with the actual contract and account addresses on your system.
 
