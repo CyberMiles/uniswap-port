@@ -138,9 +138,7 @@ deployedUniswapExchangeTemplate.factoryAddress()
 "0x0000000000000000000000000000000000000000"
 ```
 
-It is important that you understand the concept of the singular Exchange contract "template" vs the potentially numerous instances of the Exchange contract. The following diagram illustrates that our deployedUniswapFactoryContract can see the one and only exchangeTemplate(). It is important to remember that there will only be one Factory and one Exchange "template" per Uniswap application. On the other hand there are of course going to be many many instances of the Exchanges as shown below. Let's go ahead and create one of these Exchange instances and then demonstrate how to call its factoryAddress().
-
-![Diagram showing contract instance structure](../.gitbook/assets/Screen-Shot-2018-12-06-at-1.00.57-PM.png)
+It is important that you understand the concept of the singular Exchange contract "template" vs the potentially numerous instances of the Exchange contract. It is important to remember that there will only be one Factory and one Exchange "template" per Uniswap application. On the other hand there are of course going to be many many instances of the Exchanges as shown below. Let's go ahead and create one of these Exchange instances and then demonstrate how to call its factoryAddress().
 
 ### Creating an Exchange
 
@@ -180,9 +178,37 @@ deployedUniswapFactoryContract.createExchange("0x8390513eb94287c14b3c6ef994842ce
 We promised a little while back that when an exchange instance (for a specific token) was created we would be able to query its Factory and many other details. Let's go ahead and run some commands to ensure that the Factory, Exchange Template and the new Exchange instance are all wired together as intended.
 
 We can call the exchange of the YUAN token
+
 ```javascript
-deployedUniswapFactoryContract.getExchange(deployedYuanTokenInstance.address)
+deployedUniswapFactoryContract.getExchange("0x8390513eb94287c14b3c6ef994842cededd91836")
 "0x33af32276043724f4584e7fc33e59fed8934a2df"
+```
+
+We can also call the YUAN Exchange's factory address and Token address which will of course match our single factory address and the address of the YUAN token.
+
+```javascript
+var uniswapExchangeTemplate = web3.cmt.contract(uniswapExchangeAbi,function(error, result){if(!error){console.log(result)}else{console.log(error)}});
+
+var yuanExchangeInstance = uniswapExchangeTemplate.at(deployedUniswapFactoryContract.getExchange("0x8390513eb94287c14b3c6ef994842cededd91836"))
+
+> yuanExchangeInstance.factoryAddress()
+"0x7753d7fb5d93ff9af0cffcd578f7c3bbc3d303ba"
+> yuanExchangeInstance.tokenAddress()
+"0x8390513eb94287c14b3c6ef994842cededd91836"
+```
+
+We can now also ask the factory contract to provide us with the exchange address by passing in the token as an argument
+
+```javascript
+deployedUniswapFactoryContract.getExchange("0x8390513eb94287c14b3c6ef994842cededd91836")
+"0x33af32276043724f4584e7fc33e59fed8934a2df"
+```
+
+Or we can ask the factory contract to provide us with the token address by passing in the exchange contract address as an argument
+
+```javascript
+> deployedUniswapFactoryContract.getToken("0x33af32276043724f4584e7fc33e59fed8934a2df")
+"0x8390513eb94287c14b3c6ef994842cededd91836"
 ```
 
 ### Restoring web3 variables in a new session
