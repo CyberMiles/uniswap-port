@@ -254,7 +254,7 @@ var uniswapExchangeTemplate = web3.cmt.contract(uniswapExchangeAbi,function(erro
 ```
 
 ```javascript
- var deployedUniswapExchangeTemplate = uniswapExchangeTemplate.at("0xb2864c1e9d81e733f2cb045e2b2b6595be2cd0ad")
+ var deployedUniswapExchangeTemplate = uniswapExchangeTemplate.at("0xf02ce53600badb397215b3ab799c76f5626994cf")
 ```
 
 ```javascript
@@ -266,11 +266,15 @@ uniswapFactoryAbi = [{"name": "NewExchange", "inputs": [{"type": "address", "nam
 ```
 
 ```javascript
-var deployedUniswapFactoryContract = uniswapFactoryContract.at("0x508dbcc197e61328c88f76f1523f7286218ce3b5")
+var deployedUniswapFactoryContract = uniswapFactoryContract.at("0x7753d7fb5d93ff9af0cffcd578f7c3bbc3d303ba")
 ```
 
 ```javascript
+var uniswapExchangeTemplate = web3.cmt.contract(uniswapExchangeAbi,function(error, result){if(!error){console.log(result)}else{console.log(error)}});
+```
 
+```javascript
+ var deployedYUANExchange = uniswapExchangeTemplate.at("0x33af32276043724f4584e7fc33e59fed8934a2df")
 ```
 
 ```javascript
