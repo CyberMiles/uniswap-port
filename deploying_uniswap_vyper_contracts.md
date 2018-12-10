@@ -356,6 +356,4 @@ var newCRC20SmartTokenContract = web3.cmt.contract(crc20Abi, function(error, res
 ```javascript
 var deployedYuanToken = newCRC20SmartTokenContract.at("0xc4c97929301eb30ff5c9c3150bbbe553768ffbbe")
 
-```javascript
-
 ```
