@@ -352,3 +352,24 @@ var newCRC20SmartTokenContract = web3.cmt.contract(crc20Abi, function(error, res
 var deployedYuanToken = newCRC20SmartTokenContract.at("0xc4c97929301eb30ff5c9c3150bbbe553768ffbbe")
 
 ```
+
+Testing of these variables can be as follows
+
+```javascript
+deployedUniswapFactoryContract.getToken(yuanExchangeInstance.address)
+//"0xc4c97929301eb30ff5c9c3150bbbe553768ffbbe"
+deployedUniswapFactoryContract.getExchange(deployedYuanToken.address)
+//"0xaf1a51fdca46190e7703b6cf97470efc92ec6498"
+deployedUniswapFactoryContract.exchangeTemplate()
+//"0xf02ce53600badb397215b3ab799c76f5626994cf"
+deployedUniswapFactoryContract.address
+//"0x7753d7fb5d93ff9af0cffcd578f7c3bbc3d303ba"
+yuanExchangeInstance.factoryAddress()
+//"0x7753d7fb5d93ff9af0cffcd578f7c3bbc3d303ba"
+yuanExchangeInstance.tokenAddress()
+//"0xc4c97929301eb30ff5c9c3150bbbe553768ffbbe"
+deployedYuanToken.address
+//"0xc4c97929301eb30ff5c9c3150bbbe553768ffbbe"
+deployedUniswapFactoryContract.getToken(yuanExchangeInstance.address)
+//"0xc4c97929301eb30ff5c9c3150bbbe553768ffbbe"
+```
