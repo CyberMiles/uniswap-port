@@ -294,7 +294,7 @@ var amountOfYuanTokensToDeposit = web3.toWei(200000, 'cmt')
 var amountOfCMTToDeposit = web3.toWei(2000, 'cmt')
 
 // Add the liquidity
-deployedYUANExchange.addLiquidity.sendTransaction(0, amountOfYuanTokensToDeposit, 1642075763,{ from:tokenOwner, value: amountOfCMTToDeposit, gas: "40000"},function (error, result){ if(!error){ console.log(result); } else{ console.log(error); } });
+yuanExchangeInstance.addLiquidity.sendTransaction(0, amountOfYuanTokensToDeposit, 1642075763,{ from:tokenOwner, value: amountOfCMTToDeposit, gas: "400000"},function (error, result){ if(!error){ console.log(result); } else{ console.log(error); } });
 ```
 
 ### Restoring web3 variables in a new session
@@ -335,7 +335,7 @@ var uniswapExchangeTemplate = web3.cmt.contract(uniswapExchangeAbi,function(erro
 ```
 
 ```javascript
- var deployedYUANExchange = uniswapExchangeTemplate.at("0xaf1a51fdca46190e7703b6cf97470efc92ec6498")
+ var yuanExchangeInstance = uniswapExchangeTemplate.at("0xaf1a51fdca46190e7703b6cf97470efc92ec6498")
 ```
 
 Token
