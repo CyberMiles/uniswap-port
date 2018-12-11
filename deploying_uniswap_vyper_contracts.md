@@ -1,7 +1,8 @@
-# Uniswap Smart Contract Example
+# Uniswap deployment instructions
+
 This page contains a blow by blow example of how to initialize, deploy and then interact with the Uniswap Smart Contracts. All work will be performed in the web3 console. At the end of this tutorial example we will be performing the necessary [Uniswap Frontend](https://github.com/Uniswap/uniswap-frontend) configuration. The outcome being your own complete Uniswap exchange application like the official [Uniswap Exchange](https://uniswap.exchange/swap).
 
-## Vyper
+## Backend (smart contracts)
 The original [Solidity](https://github.com/Uniswap/old-solidity-contracts) Smart Contracts are out of date. Therefore we will be using the [current Vyper Smart Contracts](https://github.com/Uniswap/contracts-vyper) during this tutorial example. 
 
 ### Housekeeping
@@ -372,4 +373,74 @@ deployedYuanToken.address
 //"0xc4c97929301eb30ff5c9c3150bbbe553768ffbbe"
 deployedUniswapFactoryContract.getToken(yuanExchangeInstance.address)
 //"0xc4c97929301eb30ff5c9c3150bbbe553768ffbbe"
+```
+
+## Frontend (deploying the Uniswap UI)
+
+Create an instance of Ubuntu Linux.
+
+Install yarn by following the instructions at the following URL
+
+```javascript
+https://yarnpkg.com/lang/en/docs/install/#debian-stable
+```
+
+You will need build-essential, if you don't already have it installed
+
+```javascript
+sudo apt-get install build-essential
+```
+
+Please install node by following the instructions at the following URL
+```javascript
+https://github.com/nodesource/distributions/blob/master/README.md#debinstall
+```
+Check out the Uniswap frontend source code 
+
+```javascript
+https://github.com/CyberMiles/uniswap-frontend.git
+```
+
+Update the contract addresses (using the values from the smart contract work which we did above) in the following file.
+
+```javascript
+~/uniswap-frontend/src/ducks/addresses.js
+```
+Here is an example. 
+The tokenAddresses -> addresses is the token symbol and token contract address.
+The exchangeAddresses -> addresses is the token symbol and the Uniswap exchange contract instance's address
+The exchangeAddresses -> fromToken is a mapping between the two values above i.e. oneside is token address and other side is exchange address.
+the factoryAddress is the Uniswap factory's contract address
+
+```javascript
+const TRAVIS = {
+    "tokenAddresses": {
+        "addresses": [
+            [
+                "YUAN",
+                "0xc4c97929301eb30ff5c9c3150bbbe553768ffbbe"
+            ]
+        ]
+    },
+    "exchangeAddresses": {
+        "addresses": [
+            [
+                "YUAN",
+                "0xaf1a51fdca46190e7703b6cf97470efc92ec6498"
+            ]
+        ],
+        "fromToken": {
+            "0xc4c97929301eb30ff5c9c3150bbbe553768ffbbe": "0xaf1a51fdca46190e7703b6cf97470efc92ec6498"
+        }
+    },
+    "factoryAddress": "0x7753d7fb5d93ff9af0cffcd578f7c3bbc3d303ba"
+};
+```
+
+
+To run Uniswap, type the following commands
+```javascript
+cd /home/ubuntu/uniswap-frontend-master
+npm install
+yarn start:travis --loglevel verbose
 ```
