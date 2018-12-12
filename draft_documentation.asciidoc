@@ -1,3 +1,6 @@
+This is just a rough draft, the most recent documentation is now at https://github.com/CyberMiles/uniswap-frontend/blob/master/deploying_uniswap.md
+
+
 This is a very loose first draft - note taking - as we spin up an entire Uniswap instance complete with Bancor Smart Token to trade
 This will be refined and polished up significantly, this first version of the draft is just for efficiency.
 
