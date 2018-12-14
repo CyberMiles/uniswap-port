@@ -11,4 +11,4 @@ python3 port.py
 ```
 
 ## Deploying the Vyper contracts
-There are also [instructions on how to deploy the Vyper contracts](https://github.com/CyberMiles/uniswap-port/blob/master/deploying_uniswap_vyper_contracts.md) which underpin the system. 
+There are also [instructions on how to deploy the Vyper contracts](https://github.com/CyberMiles/uniswap-frontend/blob/master/documentation/deploying_uniswap.md) which underpin the system. 
